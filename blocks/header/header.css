@@ -1,0 +1,15 @@
+@import url(./__logo/header__logo.css);
+@import url(./__line/header__line.css);
+
+.header {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .header {
+        width: 66%;
+        margin: 0 auto;
+    }
+}
