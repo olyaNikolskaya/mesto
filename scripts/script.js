@@ -7,23 +7,25 @@ const profileName = document.querySelector('.profile__name')
 const profileDescription = document.querySelector('.profile__description')
 const saveButton = popup.querySelector('.popup__save-button')
 
-const nameInput = popup.querySelector('.js-form__name-input')
-const descriptionInput = popup.querySelector('.js-form__descriptio-input')
-
-nameInput.setAttribute('value', profileName.textContent) 
-descriptionInput.setAttribute('value', profileDescription.textContent)
+const nameInput = popup.querySelector('.popup__field_input-name')
+const descriptionInput = popup.querySelector('.popup__field_input-description')
 
 
+const openPopup = function () {
+    nameInput.value = profileName.textContent
+    descriptionInput.value = profileDescription.textContent
+    popup.classList.add('popup_is-opened')
+}
 
-const popupToggle = function () {
-    popup.classList.toggle('popup_is-opened')
+const closePopup = function () {
+    popup.classList.remove('popup_is-opened')
 }
 
 const closePopupByClickOnOverlay = function (event) {
     if (event.target != event.currentTarget) {
         return
     }
-    popupToggle()
+    closePopup()
 }
 
 const formSubmitHandler = function (event) {
@@ -35,11 +37,12 @@ const formSubmitHandler = function (event) {
     profileName.textContent = name
     profileDescription.textContent = job
 
-    popupToggle()
+    closePopup()
 }
 
-editProfileButton.addEventListener('click', popupToggle)
-closePopupButton.addEventListener('click', popupToggle)
+
+editProfileButton.addEventListener('click', openPopup)
+closePopupButton.addEventListener('click', closePopup)
 popup.addEventListener('click', closePopupByClickOnOverlay)
 editProfileForm.addEventListener('submit', formSubmitHandler)
 

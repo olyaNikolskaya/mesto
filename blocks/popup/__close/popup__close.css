@@ -1,5 +1,14 @@
 .popup__close {
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    background-image: url(../../../images/close_icon.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
     height: 26px;
+    width: 26px;
     position: absolute;
     top: -40px;
     right: 0;
@@ -12,7 +21,8 @@
 
 @media (min-width:768px) {
     .popup__close  {
-        height: 40px;
+        height: 41px;
+        width: 41px;
         right: -35px;
         top: -35px;
     }
