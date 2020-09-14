@@ -12,8 +12,80 @@
                 <div class="header__logo"></div>
                 <div class="header__line"></div>
             </header>
-            <main class="content"></main>
-            <footer class="footer"></footer>
+            <main class="content">
+                <section class="profile">
+                    <img class="profile__avatar" src="./images/avatar.svg" alt="аватарка">
+                    <div class="profile__info">
+                        <div class="profile__header">
+                            <h1 class="profile__name">Жак-Ив Кусто</h1>
+                            <button class="profile__edit-button"></button>
+                        </div>
+                        <p class="profile__description">Исследователь океана</p>
+                    </div>
+                    <button class="profile__add-button"></button>
+                </section>
+                <section class="cards">
+                    <div class="cards__item">
+                        <img class="cards__photo" src="./images/karachaevo-cherkesiya.png" alt="Карачаево-Черкесия">
+                        <div class="cards__content">
+                            <h2 class="cards__title">Карачаево-Черкесия</h2>
+                            <button class="cards__like"></button>
+                        </div>
+                    </div>
+                    <div class="cards__item">
+                        <img class="cards__photo" src="./images/elbrus.png" alt="Гора Эльбрус">
+                        <div class="cards__content">
+                            <h2 class="cards__title">Гора Эльбрус</h2>
+                            <div class="cards__like"></div>
+                        </div>
+                    </div>
+                    <div class="cards__item">
+                        <img class="cards__photo" src="./images/dombay.png" alt="Домбай">
+                        <div class="cards__content">
+                            <h2 class="cards__title">Домбай</h2>
+                            <div class="cards__like"></div>
+                        </div>
+                    </div>
+                    <div class="cards__item">
+                        <img class="cards__photo" src="./images/elbrus.png" alt="Гора Эльбрус">
+                        <div class="cards__content">
+                            <h2 class="cards__title">Гора Эльбрус</h2>
+                            <div class="cards__like"></div>
+                        </div>
+                    </div>
+                    <div class="cards__item">
+                        <img class="cards__photo" src="./images/dombay.png" alt="Домбай">
+                        <div class="cards__content">
+                            <h2 class="cards__title">Домбай</h2>
+                            <div class="cards__like"></div>
+                        </div>
+                    </div>
+                    <div class="cards__item">
+                        <img class="cards__photo" src="./images/karachaevo-cherkesiya.png" alt="Карачаево-Черкесия">
+                        <div class="cards__content">
+                            <h2 class="cards__title">Карачаево-Черкесия</h2>
+                            <div class="cards__like"></div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+            <footer class="footer">
+                <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
+            </footer>
+            <section class="popup">
+                <div class="popup__container">
+                    <img class="popup__close" src="./images/close_icon.svg" alt="Закрыть форму">
+                    <h3 class="popup__title">Редактировать профиль</h3>
+                    <form class="popup__form">
+                        <fieldset class="popup__profile-info">
+                            <input class="popup__field js-form__name-input" type="text">
+                            <input class="popup__field js-form__descriptio-input" type="text">
+                            <input class="popup__save-button" type="submit" value="Сохранить">
+                        </fieldset>
+                    </form>
+                </div>
+            </section>
         </div>
+        <script src="./scripts/script.js" defer></script>
     </body>
 </html>

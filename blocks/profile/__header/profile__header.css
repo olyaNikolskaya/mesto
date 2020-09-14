@@ -1,0 +1,10 @@
+.profile__header {
+    display: flex;
+    min-width: 218px;
+}
+
+@media (min-width: 1280px) {
+    .profile__header {
+        min-width: 336px;
+    }
+}
