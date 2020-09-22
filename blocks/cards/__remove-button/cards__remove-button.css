@@ -1,24 +1,23 @@
-@import url(./_active/cards__like_active.css);
-
-.cards__like {
+.cards__remove-button {
     background: none;
     border: none;
     box-shadow: none;
-    background-image: url(../../../images/like.svg);
+    background-image: url(../../../images/trash.svg);
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-    align-self: center;
     width: 18px;
-    height: 18px;
-    padding-right: 12px;
+    height: 19px;
+    position: absolute;
+    top: 18px;
+    right: 15px;
 }
 
-.cards__like:hover {
+.cards__remove-button:hover {
     cursor: pointer;
     opacity: 0.6;
 }
 
-.cards__like:focus {
+.cards__remove-button:focus {
     outline: none;
 }

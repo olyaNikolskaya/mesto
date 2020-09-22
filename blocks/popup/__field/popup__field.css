@@ -13,3 +13,7 @@
 .popup__field:focus {
     outline: none;
 }
+
+.popup__field::placeholder {
+    color: #C4C4C4;
+}
