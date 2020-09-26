@@ -7,11 +7,11 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-    height: 26px;
-    width: 26px;
     position: absolute;
-    top: -40px;
-    right: 0;
+    height: 30px;
+    width: 30px;
+    right: -25px;
+    top: -25px;
 }
 
 .popup__close:hover {
@@ -19,11 +19,15 @@
     opacity: 0.6;
 }
 
+.popup__close:focus {
+    outline: none;
+}
+
 @media (min-width:768px) {
     .popup__close  {
-        height: 41px;
-        width: 41px;
-        right: -35px;
-        top: -35px;
+        height: 40px;
+        width: 40px;
+        right: -32px;
+        top: -32px;
     }
 }

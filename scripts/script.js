@@ -26,7 +26,7 @@ const initialCards = [
 ];
 
 const editProfilePopup = document.querySelector('.popup_edit-profile')
-const closePopupButton = editProfilePopup.querySelector('.popup__close')
+const closeEditPopupButton = editProfilePopup.querySelector('.popup__close')
 const editProfileForm = editProfilePopup.querySelector('.popup__form')
 const editProfileButton = document.querySelector('.profile__edit-button')
 const profileName = document.querySelector('.profile__name')
@@ -34,43 +34,6 @@ const profileDescription = document.querySelector('.profile__description')
 const saveProfileButton = editProfilePopup.querySelector('.popup__save-button')
 const nameInput = editProfilePopup.querySelector('.popup__field_input-name')
 const descriptionInput = editProfilePopup.querySelector('.popup__field_input-description')
-
-function openEditPopup() {
-    nameInput.value = profileName.textContent
-    descriptionInput.value = profileDescription.textContent
-    editProfilePopup.classList.add('popup_is-opened')
-}
-
-function closeEditProfilePopup() {
-    editProfilePopup.classList.remove('popup_is-opened')
-}
-
-function closePopupByClickOnOverlay(event) {
-    if (event.target != event.currentTarget) {
-        return
-    }
-    closeEditProfilePopup()
-}
-
-function formSubmitHandler(event) {
-    event.preventDefault()
-
-    let name = nameInput.value
-    let job = descriptionInput.value
-
-    profileName.textContent = name
-    profileDescription.textContent = job
-
-    closeEditProfilePopup()
-}
-
-function setListenersForEditProfilePopup() {
-    editProfileButton.addEventListener('click', openEditPopup)
-    closePopupButton.addEventListener('click', closeEditProfilePopup)
-    editProfilePopup.addEventListener('click', closePopupByClickOnOverlay)
-    editProfileForm.addEventListener('submit', formSubmitHandler)
-}
-
 
 const cards = document.querySelector('.cards');
 const addCardPopup = document.querySelector('.popup_add-card');
@@ -80,21 +43,103 @@ const closeAddCardPopupButton = addCardPopup.querySelector('.popup__close');
 const cardNameInput = addCardPopup.querySelector('.popup__field-input-card-name');
 const cardLinkInput = addCardPopup.querySelector('.popup__field-input-card-link');
 
-function render() {
-    reset();
+const photoPreviewPopup = document.querySelector('.popup_photo-preview');
+const closePhotoPreviewButton = photoPreviewPopup.querySelector('.popup__close');
+
+function setListenersForEditProfilePopup() {
+    editProfileButton.addEventListener("click", openEditPopup)
+    closeEditPopupButton.addEventListener("click", () => closePopup(editProfilePopup))
+    editProfilePopup.addEventListener('click', closePopupByClickOnOverlay(editProfilePopup))
+    editProfileForm.addEventListener('submit', handelSubmitProfileInfo)
+}
+
+function setListenersForAddCardPopup() {
+    addCardButton.addEventListener("click", () => openPopup(addCardPopup));
+    addCardPopup.addEventListener('click', closePopupByClickOnOverlay(addCardPopup));
+    closeAddCardPopupButton.addEventListener("click", () => closePopup(addCardPopup));
+    addCardForm.addEventListener('submit', handelCreateCardSubmit);
+}
+
+function setListenersForCard() {
+    document.querySelectorAll('.cards__remove-button').forEach((btn) => {
+        btn.addEventListener("click", removeCard);
+    });
+    document.querySelectorAll('.cards__like').forEach((btn) => {
+        btn.addEventListener("click", likeCard);
+    });    
+    document.querySelectorAll('.cards__photo').forEach((item) => {
+        item.addEventListener('click', openPhotoPreview);
+    });
+}
+
+function setListenersForPhotoPreview() {
+    document.querySelectorAll('.cards__photo').forEach((btn) => {
+        btn.addEventListener("click", openPhotoPreview);
+    });
+    photoPreviewPopup.addEventListener('click', closePopupByClickOnOverlay(photoPreviewPopup));
+    closePhotoPreviewButton.addEventListener('click', () => closePopup(photoPreviewPopup));
+  
+}
+
+const openEditPopup = function openEditPopup() {
+    fillProfileInfoInPopupFields()
+    openPopup(editProfilePopup)
+}
+const closeEditPopup = function() { 
+    closePopup(closeEditPopupButton) 
+}
+
+const openPhotoPreview = function (event) {
+    index = event.target.parentNode.dataset.id;
+    setDataForPhotoPreview(index);
+    openPopup(photoPreviewPopup)
+}
+
+function openPopup(item) {
+    item.classList.add('popup_is-opened')  
+}
+
+function closePopup(item) {
+    item.classList.remove('popup_is-opened')
+}
+
+function closePopupByClickOnOverlay(item, className) {
+    return function (event) {
+        if (event.target != event.currentTarget) {
+            return
+        }
+        closePopup(item, className);
+    }
+}
+
+function fillProfileInfoInPopupFields() {
+    nameInput.value = profileName.textContent
+    descriptionInput.value = profileDescription.textContent
+}
+
+function handelSubmitProfileInfo(event) {
+    event.preventDefault()
+    let name = nameInput.value;
+    let job = descriptionInput.value;
+
+    profileName.textContent = name;
+    profileDescription.textContent = job;
+
+    closePopup(editProfilePopup);
+}
+
+
+function renderCards() {
+    resetCards();
     initialCards.forEach(renderCard);
+    setListenersForCard();
 }
 
-function reset() {
-    cards.innerHTML = "";
-    cardNameInput.value = "";
-    cardLinkInput.value = "";
-}
-
-function renderCard(initialCard) {
+function renderCard(initialCard, index) {
     const cardTamplate = document.querySelector('#card-item').content;
     const cardItem = cardTamplate.cloneNode(true);
 
+    cardItem.querySelector('.cards__item').setAttribute("data-id", index);
     cardItem.querySelector('.cards__photo').setAttribute("src", initialCard.link);
     cardItem.querySelector('.cards__photo').setAttribute("alt", initialCard.name);
     cardItem.querySelector('.cards__title').textContent = initialCard.name;
@@ -102,65 +147,41 @@ function renderCard(initialCard) {
     cards.append(cardItem);
 }
 
-function handleCreateCardSubmite(event) {
+function resetCards() {
+    cards.innerHTML = "";
+    cardNameInput.value = "";
+    cardLinkInput.value = "";
+}
+
+function removeCard(event) {
+    index = event.target.parentNode.dataset.id;
+    initialCards.splice(index, 1);
+    renderCards();
+}
+
+function likeCard(event) {
+    const eventTarget = event.target;
+    eventTarget.classList.toggle('cards__like_active');
+}
+
+function handelCreateCardSubmit(event) {
     event.preventDefault();
     let cardItem = {
         name: cardNameInput.value,
         link: cardLinkInput.value,
     };
-    
     initialCards.unshift(cardItem);
-    render();
-
-    closeAddCardPopup(addCardPopup);
+    renderCards();
+    closePopup(addCardPopup);
 }
 
-function openAddCardPopup() {
-    addCardPopup.classList.add('popup_is-opened');
-}
 
-const closeAddCardPopup = function () {
-    addCardPopup.classList.remove('popup_is-opened')
-}
-
-const closeAddCardPopupByClickOnOverlay = function (event) {
-    if (event.target != event.currentTarget) {
-        return
-    }
-    closeAddCardPopup();
-}
-
-function setListenersForAddCardPopup() {
-    addCardButton.addEventListener('click', openAddCardPopup);
-    addCardPopup.addEventListener('click', closeAddCardPopupByClickOnOverlay);
-    closeAddCardPopupButton.addEventListener('click', closeAddCardPopup);
-    addCardForm.addEventListener('submit', handleCreateCardSubmite);
-}
-
-const removeButtonForCard = document.querySelectorAll('.cards__remove-button');
-const likeButton = document.querySelectorAll('.cards__like');
-
-function removeCard() {
-
-}
-
-function likeCard(evt) {
-    const eventTarget = evt.target;
-    eventTarget.classList.toggle('cards__like_active');
-}
-
-function setListenersForCard() {
-    removeButtonForCard.forEach((btn) => {
-        btn.addEventListener('click', removeCard);
-    });
-
-    likeButton.forEach((btn => {
-        btn.addEventListener('click', likeCard)
-    }))
+function setDataForPhotoPreview(index) {
+    photoPreviewPopup.querySelector('.popup__preview-photo').setAttribute("src", initialCards[index].link);
+    photoPreviewPopup.querySelector('.popup__preview-subtitle').textContent = initialCards[index].name;
 }
 
 setListenersForEditProfilePopup();
-
-render();
 setListenersForAddCardPopup();
-setListenersForCard();
+setListenersForPhotoPreview();
+renderCards();

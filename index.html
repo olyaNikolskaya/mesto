@@ -31,7 +31,7 @@
             <section class="popup popup_edit-profile">
                 <div class="popup__container">
                     <button class="popup__close" type="button"></button>
-                    <h3 class="popup__title">Редактировать профиль</h3>
+                    <h2 class="popup__title">Редактировать профиль</h2>
                     <form class="popup__form" action="URL" method="POST" name="editProfileForm">
                         <fieldset class="popup__profile-info">
                             <input class="popup__field popup__field_input-name" type="text" name="User name">
@@ -44,7 +44,7 @@
             <section class="popup popup_add-card">
                 <div class="popup__container">
                     <button class="popup__close" type="button"></button>
-                    <h3 class="popup__title">Новое место</h3>
+                    <h2 class="popup__title">Новое место</h2>
                     <form class="popup__form" action="URL" method="POST" name="addNewPlace">
                         <fieldset class="popup__profile-info">
                             <input class="popup__field popup__field-input-card-name" type="text" name="Place's name" placeholder="Название">
@@ -54,13 +54,20 @@
                     </form>
                 </div>
             </section>
+            <section class="popup popup_photo-preview">
+                <div class="popup__preview-container">
+                    <button class="popup__close" type="button"></button>
+                    <img class="popup__preview-photo" src="notfound" alt="фото">
+                    <h3 class="popup__preview-subtitle"> </h3>
+                </div>
+            </section>
         </div>
         <template id="card-item">
             <div class="cards__item">
                 <img class="cards__photo">
                 <button class="cards__remove-button" type="button"></button>
                 <div class="cards__content">
-                    <h2 class="cards__title"></h2>
+                    <h3 class="cards__title"></h3>
                     <button class="cards__like" type="button"></button>
                 </div>
             </div>
