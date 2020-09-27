@@ -25,6 +25,7 @@ const initialCards = [
     }
 ];
 
+let currentIndex = initialCards.length;
 const editProfilePopup = document.querySelector('.popup_edit-profile')
 const closeEditPopupButton = editProfilePopup.querySelector('.popup__close')
 const editProfileForm = editProfilePopup.querySelector('.popup__form')
@@ -45,6 +46,8 @@ const cardLinkInput = addCardPopup.querySelector('.popup__field-input-card-link'
 
 const photoPreviewPopup = document.querySelector('.popup_photo-preview');
 const closePhotoPreviewButton = photoPreviewPopup.querySelector('.popup__close');
+const previewPhotophoto = photoPreviewPopup.querySelector('.popup__preview-photo');
+const previewSubtitle = photoPreviewPopup.querySelector('.popup__preview-subtitle');
 
 function setListenersForEditProfilePopup() {
     editProfileButton.addEventListener("click", openEditPopup)
@@ -60,25 +63,9 @@ function setListenersForAddCardPopup() {
     addCardForm.addEventListener('submit', handelCreateCardSubmit);
 }
 
-function setListenersForCard() {
-    document.querySelectorAll('.cards__remove-button').forEach((btn) => {
-        btn.addEventListener("click", removeCard);
-    });
-    document.querySelectorAll('.cards__like').forEach((btn) => {
-        btn.addEventListener("click", likeCard);
-    });    
-    document.querySelectorAll('.cards__photo').forEach((item) => {
-        item.addEventListener('click', openPhotoPreview);
-    });
-}
-
 function setListenersForPhotoPreview() {
-    document.querySelectorAll('.cards__photo').forEach((btn) => {
-        btn.addEventListener("click", openPhotoPreview);
-    });
     photoPreviewPopup.addEventListener('click', closePopupByClickOnOverlay(photoPreviewPopup));
     closePhotoPreviewButton.addEventListener('click', () => closePopup(photoPreviewPopup));
-  
 }
 
 const openEditPopup = function openEditPopup() {
@@ -91,7 +78,7 @@ const closeEditPopup = function() {
 
 const openPhotoPreview = function (event) {
     index = event.target.parentNode.dataset.id;
-    setDataForPhotoPreview(index);
+    setDataForPhotoPreview(initialCards[index]);
     openPopup(photoPreviewPopup)
 }
 
@@ -132,19 +119,30 @@ function handelSubmitProfileInfo(event) {
 function renderCards() {
     resetCards();
     initialCards.forEach(renderCard);
-    setListenersForCard();
+}
+
+function createCard(initialCard, index) {
+    const cardTamplate = document.querySelector('#card-item').content;
+    const cardItem = cardTamplate.cloneNode(true);
+    const cardRemoveButton = cardItem.querySelector('.cards__remove-button');
+    const cardLikeButton = cardItem.querySelector('.cards__like');
+    const cardPhoto = cardItem.querySelector('.cards__photo');
+
+    cardItem.querySelector('.cards__item').setAttribute("data-id", index);
+    cardPhoto.setAttribute("src", initialCard.link);
+    cardPhoto.setAttribute("alt", initialCard.name);
+    cardItem.querySelector('.cards__title').textContent = initialCard.name;
+
+    cardRemoveButton.addEventListener("click", removeCard);
+    cardLikeButton.addEventListener('click', likeCard);
+    cardPhoto.addEventListener('click', openPhotoPreview);
+
+    return cardItem;
 }
 
 function renderCard(initialCard, index) {
-    const cardTamplate = document.querySelector('#card-item').content;
-    const cardItem = cardTamplate.cloneNode(true);
-
-    cardItem.querySelector('.cards__item').setAttribute("data-id", index);
-    cardItem.querySelector('.cards__photo').setAttribute("src", initialCard.link);
-    cardItem.querySelector('.cards__photo').setAttribute("alt", initialCard.name);
-    cardItem.querySelector('.cards__title').textContent = initialCard.name;
-
-    cards.append(cardItem);
+    item = createCard(initialCard, index);
+    cards.prepend(item);
 }
 
 function resetCards() {
@@ -154,9 +152,8 @@ function resetCards() {
 }
 
 function removeCard(event) {
-    index = event.target.parentNode.dataset.id;
-    initialCards.splice(index, 1);
-    renderCards();
+    card = event.target.parentNode;
+    card.remove();
 }
 
 function likeCard(event) {
@@ -170,15 +167,16 @@ function handelCreateCardSubmit(event) {
         name: cardNameInput.value,
         link: cardLinkInput.value,
     };
-    initialCards.unshift(cardItem);
-    renderCards();
+    renderCard(cardItem, currentIndex);
     closePopup(addCardPopup);
+    currentIndex++;
 }
 
 
-function setDataForPhotoPreview(index) {
-    photoPreviewPopup.querySelector('.popup__preview-photo').setAttribute("src", initialCards[index].link);
-    photoPreviewPopup.querySelector('.popup__preview-subtitle').textContent = initialCards[index].name;
+function setDataForPhotoPreview(data) {
+    previewPhotophoto.src = data.link;
+    previewPhotophoto.alt = data.name;
+    previewSubtitle.textContent = data.name;
 }
 
 setListenersForEditProfilePopup();
