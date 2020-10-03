@@ -32,10 +32,32 @@
                 <div class="popup__container">
                     <button class="popup__close" type="button"></button>
                     <h2 class="popup__title">Редактировать профиль</h2>
-                    <form class="popup__form" action="URL" method="POST" name="editProfileForm">
+                    <form class="popup__form" action="URL" method="POST" name="editProfileForm" novalidate>
                         <fieldset class="popup__profile-info">
-                            <input class="popup__field popup__field_input-name" type="text" name="User name">
-                            <input class="popup__field popup__field_input-description" type="text" name="User description">
+                            <section class="popup__form-section">
+                                <input
+                                id="name-input"
+                                class="popup__field popup__field_input-name" 
+                                type="text" 
+                                name="User name" 
+                                minlength="2"
+                                maxlength="40"
+                                required
+                                >
+                                <span id="name-input-error" class="popup__field-error-text"></span>
+                            </section>
+                            <section class="popup__form-section">
+                                <input
+                                id="description-input"
+                                class="popup__field popup__field_input-description" 
+                                type="text" 
+                                name="User description" 
+                                minlength="2"
+                                maxlength="200"
+                                required
+                                >
+                                <span id="description-input-error" class="popup__field-error-text"></span>
+                            </section>
                             <button class="popup__save-button" type="submit">Сохранить</button>
                         </fieldset>
                     </form>
@@ -45,11 +67,33 @@
                 <div class="popup__container">
                     <button class="popup__close" type="button"></button>
                     <h2 class="popup__title">Новое место</h2>
-                    <form class="popup__form" action="URL" method="POST" name="addNewPlace">
+                    <form class="popup__form" action="URL" method="POST" name="addNewPlace" novalidate>
                         <fieldset class="popup__profile-info">
-                            <input class="popup__field popup__field-input-card-name" type="text" name="Place's name" placeholder="Название">
-                            <input class="popup__field popup__field-input-card-link" type="text" name="link to image" placeholder="Ссылка на картинку">
-                            <button class="popup__save-button" type="submit">Создать</button>
+                            <section class="popup__form-section">
+                                <input
+                                id="card-name"
+                                class="popup__field popup__field-input-card-name" 
+                                type="text" 
+                                name="Place's name"
+                                placeholder="Название"
+                                minlength="2"
+                                maxlength="30"
+                                required
+                                >
+                                <span id="card-name-error" class="popup__field-error-text"></span>
+                            </section>
+                            <section class="popup__form-section">
+                                <input
+                                id="card-link"
+                                class="popup__field popup__field-input-card-link" 
+                                type="URL" 
+                                name="link to image" 
+                                placeholder="Ссылка на картинку"
+                                required
+                                >
+                                <span id="card-link-error" class="popup__field-error-text"></span>
+                            </section>
+                            <button class="popup__save-button popup__save-button_disabled" type="submit" disabled>Создать</button>
                         </fieldset>
                     </form>
                 </div>
@@ -57,7 +101,7 @@
             <section class="popup popup_photo-preview">
                 <div class="popup__preview-container">
                     <button class="popup__close" type="button"></button>
-                    <img class="popup__preview-photo" src="notfound" alt="фото">
+                    <img class="popup__preview-photo" src="" alt="фото">
                     <h3 class="popup__preview-subtitle"> </h3>
                 </div>
             </section>
@@ -73,5 +117,6 @@
             </div>
         </template>
         <script src="./scripts/script.js" defer></script>
+        <script src="./scripts/validate.js" defer></script>
     </body>
 </html>

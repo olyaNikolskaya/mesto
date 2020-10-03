@@ -51,13 +51,13 @@ const previewSubtitle = photoPreviewPopup.querySelector('.popup__preview-subtitl
 
 function setListenersForEditProfilePopup() {
     editProfileButton.addEventListener("click", openEditPopup)
+    editProfilePopup.addEventListener('click', closePopupByClickOnOverlay(editProfilePopup));
     closeEditPopupButton.addEventListener("click", () => closePopup(editProfilePopup))
-    editProfilePopup.addEventListener('click', closePopupByClickOnOverlay(editProfilePopup))
     editProfileForm.addEventListener('submit', handelSubmitProfileInfo)
 }
 
 function setListenersForAddCardPopup() {
-    addCardButton.addEventListener("click", () => openPopup(addCardPopup));
+    addCardButton.addEventListener("click", openAddPopup);
     addCardPopup.addEventListener('click', closePopupByClickOnOverlay(addCardPopup));
     closeAddCardPopupButton.addEventListener("click", () => closePopup(addCardPopup));
     addCardForm.addEventListener('submit', handelCreateCardSubmit);
@@ -76,18 +76,32 @@ const closeEditPopup = function() {
     closePopup(closeEditPopupButton) 
 }
 
-const openPhotoPreview = function (event) {
+function openAddPopup() {
+    openPopup(addCardPopup);
+}
+
+function openPhotoPreview(event) {
     index = event.target.parentNode.dataset.id;
     setDataForPhotoPreview(initialCards[index]);
-    openPopup(photoPreviewPopup)
+    openPopup(photoPreviewPopup);
 }
 
 function openPopup(item) {
-    item.classList.add('popup_is-opened')  
+    document.addEventListener('keydown', escButtonHandler(item));
+    item.classList.add('popup_is-opened') 
 }
 
 function closePopup(item) {
     item.classList.remove('popup_is-opened')
+}
+
+function escButtonHandler(item) {
+    return function closePopupByEsc(evt) {
+        if(evt.key === "Escape") {
+            item.classList.remove('popup_is-opened')
+            document.removeEventListener('keydown', closePopupByEsc);
+        }
+    }
 }
 
 function closePopupByClickOnOverlay(item, className) {
