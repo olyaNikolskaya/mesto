@@ -143,6 +143,7 @@ function createCard(initialCard, index) {
     const cardPhoto = cardItem.querySelector('.cards__photo');
 
     cardItem.querySelector('.cards__item').setAttribute("data-id", index);
+    initialCards[index] =  initialCard;
     cardPhoto.setAttribute("src", initialCard.link);
     cardPhoto.setAttribute("alt", initialCard.name);
     cardItem.querySelector('.cards__title').textContent = initialCard.name;
