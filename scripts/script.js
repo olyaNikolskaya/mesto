@@ -32,7 +32,6 @@ const editProfileForm = editProfilePopup.querySelector('.popup__form')
 const editProfileButton = document.querySelector('.profile__edit-button')
 const profileName = document.querySelector('.profile__name')
 const profileDescription = document.querySelector('.profile__description')
-const saveProfileButton = editProfilePopup.querySelector('.popup__save-button')
 const nameInput = editProfilePopup.querySelector('.popup__field_input-name')
 const descriptionInput = editProfilePopup.querySelector('.popup__field_input-description')
 
@@ -72,35 +71,31 @@ const openEditPopup = function openEditPopup() {
     fillProfileInfoInPopupFields()
     openPopup(editProfilePopup)
 }
-const closeEditPopup = function() { 
-    closePopup(closeEditPopupButton) 
-}
 
 function openAddPopup() {
     openPopup(addCardPopup);
 }
 
 function openPhotoPreview(event) {
-    index = event.target.parentNode.dataset.id;
+    const index = event.target.parentNode.dataset.id;
     setDataForPhotoPreview(initialCards[index]);
     openPopup(photoPreviewPopup);
 }
 
 function openPopup(item) {
-    document.addEventListener('keydown', escButtonHandler(item));
+    document.addEventListener('keydown', escButtonHandler);
     item.classList.add('popup_is-opened') 
 }
 
 function closePopup(item) {
+    document.removeEventListener('keydown', escButtonHandler);
     item.classList.remove('popup_is-opened')
 }
 
-function escButtonHandler(item) {
-    return function closePopupByEsc(evt) {
-        if(evt.key === "Escape") {
-            item.classList.remove('popup_is-opened')
-            document.removeEventListener('keydown', closePopupByEsc);
-        }
+function escButtonHandler(evt) {
+    if(evt.key === "Escape") {
+        const openedPopup = document.querySelector('.popup_is-opened')
+        closePopup(openedPopup)
     }
 }
 
@@ -156,7 +151,7 @@ function createCard(initialCard, index) {
 }
 
 function renderCard(initialCard, index) {
-    item = createCard(initialCard, index);
+    const item = createCard(initialCard, index);
     cards.prepend(item);
 }
 
@@ -167,7 +162,7 @@ function resetCards() {
 }
 
 function removeCard(event) {
-    card = event.target.parentNode;
+    const card = event.target.closest('.cards__item');
     card.remove();
 }
 

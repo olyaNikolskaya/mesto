@@ -1,11 +1,11 @@
-configObj = {
-    formSelector: '.popup__form',
-    inputSelector: '.popup__field',
-    submitButtonSelector: '.popup__save-button',
-    inactiveButtonClass: 'popup__save-button_disabled',
-    inputErrorClass: 'popup__field-error-text',
-    errorClass: 'popup__field-error-text_visible'
-}
+ const configObj = {
+        formSelector: '.popup__form',
+        inputSelector: '.popup__field',
+        submitButtonSelector: '.popup__save-button',
+        inactiveButtonClass: 'popup__save-button_disabled',
+        inputErrorClass: 'popup__field-error-text',
+        errorClass: 'popup__field-error-text_visible'
+    }
 
 function showInputError(formElement, inputElement, errorMessage, inputErrorClass) {
     const errorElement = formElement.querySelector(`#${inputElement.id}-error`)
