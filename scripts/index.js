@@ -1,5 +1,5 @@
-import Card from './card.js';
-import FormValidator from './formValidator.js'
+import Card from './Card.js';
+import FormValidator from './FormValidator.js'
 import {initialCards, config, validationConfig} from './config.js';
 
 const editProfilePopup = document.querySelector('.popup_edit-profile')
@@ -49,7 +49,7 @@ function openAddPopup() {
     openPopup(addCardPopup);
 }
 
-const openPopup = function openPopup(item) {
+function openPopup(item) {
     document.addEventListener('keydown', escButtonHandler);
     item.classList.add('popup_is-opened') 
 }
@@ -66,12 +66,12 @@ function escButtonHandler(evt) {
     }
 }
 
-function closePopupByClickOnOverlay(item, className) {
+function closePopupByClickOnOverlay(item) {
     return function (event) {
         if (event.target != event.currentTarget) {
             return
         }
-        closePopup(item, className);
+        closePopup(item);
     }
 }
 
@@ -82,8 +82,8 @@ function fillProfileInfoInPopupFields() {
 
 function handelSubmitProfileInfo(event) {
     event.preventDefault()
-    let name = nameInput.value;
-    let job = descriptionInput.value;
+    const name = nameInput.value;
+    const job = descriptionInput.value;
 
     profileName.textContent = name;
     profileDescription.textContent = job;
@@ -95,24 +95,26 @@ function openPhotoPreviewPopup() {
     openPopup(photoPreviewPopup);
 }
 
+function createCard(item) {
+    const card = new Card(item, config, openPhotoPreviewPopup);
+    const cardItem = card.getCardItem();
+    config.cardlist.prepend(cardItem);
+}
+
 function handelCreateCardSubmit(event) {
     event.preventDefault();
-    let cardData = {
+    const cardData = {
         name: cardNameInput.value,
         link: cardLinkInput.value,
     };
-    const card = new Card(cardData, config, openPhotoPreviewPopup);
-    const cardItem = card.getCardItem();
-    config.cardlist.prepend(cardItem);
+    createCard(cardData)
     closePopup(addCardPopup);
 }
 
 
 function renderCards() {
     initialCards.forEach((item) => {
-    const card = new Card(item, config, openPhotoPreviewPopup);
-    const cardItem = card.getCardItem();
-    config.cardlist.prepend(cardItem);
+        createCard(item)
  })
 }
 
