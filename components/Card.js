@@ -1,9 +1,9 @@
  export default class Card {
-    constructor(item, config, openPopup) {
+    constructor(item, config, handleCardClick) {
         this._name = item.name;
-        this._link = item.link;
+        this._image = item.image;
         this._config = config;
-        this._openPopup = openPopup;
+        this._handleCardClick = handleCardClick;
     }
 
     getCardItem() {
@@ -20,15 +20,16 @@
     _fillCardWithData() {
         const cardPhoto = this._cardItem.querySelector(this._config.cardPhotoSelector);
         const cardTitle = this._cardItem.querySelector(this._config.cardTitleSelector);
-        cardPhoto.src = this._link;
+        cardPhoto.src = this._image;
         cardPhoto.alt = this._name;
         cardTitle.textContent = this._name;
     }
 
+
     _setEventListeners() {
         this._cardItem.querySelector(this._config.cardRemoveButtonSelector).addEventListener('click', () => this._removeCard());
         this._cardItem.querySelector(this._config.cardLikeSelector).addEventListener('click', () => this._likeCard());
-        this._cardItem.querySelector(this._config.cardPhotoSelector).addEventListener('click', () => this._openPhotoPreview());
+        this._cardItem.querySelector(this._config.cardPhotoSelector).addEventListener('click', () => this._handleCardClick());
     }
 
     _removeCard() {
@@ -37,16 +38,5 @@
 
     _likeCard() {
         this._cardItem.querySelector(this._config.cardLikeSelector).classList.toggle(this._config.activeLikeClass);
-    }
-
-    _openPhotoPreview() {
-        this._setDataForPhotoPreview();
-        this._openPopup(this._cardItem);
-    }
-
-    _setDataForPhotoPreview() {
-        this._config.previewPhotophoto.src = this._link;
-        this._config.previewPhotophoto.alt = this._name;
-        this._config.previewSubtitle.textContent = this._name;
     }
 }
