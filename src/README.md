@@ -14,3 +14,4 @@ https://olyanikolskaya.github.io/mesto/
 * Grids
 * Flex-box
 * JavaScript
+* Сборщик webpack
