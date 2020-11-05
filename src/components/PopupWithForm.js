@@ -32,10 +32,4 @@ export default class PopupWithForm extends Popup {
         });
         return objInputValues;
     }
-
-    disableSubmitButton() {
-        const submitButton = this._popupForm.querySelector('.popup__save-button')
-        submitButton.classList.add('popup__save-button_disabled');
-        submitButton.disabled = true;
-    }
 }

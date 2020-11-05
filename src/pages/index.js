@@ -35,7 +35,7 @@ const cardList = new Section({
 }, cardConfig.cardlist);
 cardList.renderItems(initialCards);
 
-const validator = new FormValidator(validationConfig)
+
 
 const addCardPopup = new PopupWithForm(
     popupAddCardElement,
@@ -46,7 +46,8 @@ const addCardPopup = new PopupWithForm(
         cardList.addItem(card.getCardItem());
         addCardPopup.close();
     });
-validator.enableValidation(popupAddCardElement.querySelector(validationConfig.formSelector))
+const validatorAddCardPopup = new FormValidator(validationConfig, popupAddCardElement.querySelector(validationConfig.formSelector))
+validatorAddCardPopup.enableValidation()
 
 const userInfo = new UserInfo({
     userNameSelector: profileNameSelector,
@@ -61,14 +62,15 @@ const editUserInfoPopup = new PopupWithForm(
         userInfo.setUserInfo(inputValues)
         editUserInfoPopup.close();
     });
-validator.enableValidation(popupEditElement.querySelector(validationConfig.formSelector))
+const validatorEditUserInfoPopup = new FormValidator(validationConfig, popupEditElement.querySelector(validationConfig.formSelector))
+validatorEditUserInfoPopup.enableValidation()
 
 editProfileButton.addEventListener("click", () => {
     editUserInfoPopup.open()
     editUserInfoPopup.setInputValue(userInfo.getUserInfo())
 })  
 addCardButton.addEventListener("click", () => {
-    addCardPopup.disableSubmitButton()
+    validatorAddCardPopup.disableSubmitButton()
     addCardPopup.open()
 })
 
