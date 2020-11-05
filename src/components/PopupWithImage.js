@@ -2,23 +2,21 @@ import Popup from "./Popup.js";
 
 export default class PopupWithImage extends Popup {
     
-    constructor(popupSelector, data) {
+    constructor(popupSelector) {
         super(popupSelector);
-        this._name = data.name;
-        this._image = data.image;
     }
 
-    open() {
-        this._setDataForPhotoPreview();
+    open(data) {
+        this._setDataForPhotoPreview(data);
         super.open();
     }
 
-    _setDataForPhotoPreview() {
+    _setDataForPhotoPreview(data) {
         const previewPhotophoto = this._popup.querySelector('.popup__preview-photo');
         const previewSubtitle = this._popup.querySelector('.popup__preview-subtitle');
 
-        previewPhotophoto.alt = this._name;
-        previewPhotophoto.src = this._image;
-        previewSubtitle.textContent = this._name;
+        previewPhotophoto.alt = data.name;
+        previewPhotophoto.src = data.image;
+        previewSubtitle.textContent = data.name;
     }
 }

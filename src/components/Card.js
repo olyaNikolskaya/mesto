@@ -14,7 +14,7 @@
     }
 
     _getCardTemplate() {
-        return this._config.cardTemplate.content.cloneNode(true).children[0];
+        return this._config.cardTemplate.content.cloneNode(true).querySelector('.cards__item');
     }
     
     _fillCardWithData() {

@@ -24,12 +24,18 @@ export default class PopupWithForm extends Popup {
         });
     }
     
-    _getInputValues() {
+    getInputValues() {
         const inputsArray = Array.from(this._popup.querySelectorAll('.popup__field'));
         const objInputValues = {};
         inputsArray.forEach((item) => {
             objInputValues[item.name] = item.value;
         });
         return objInputValues;
+    }
+
+    disableSubmitButton() {
+        const submitButton = this._popupForm.querySelector('.popup__save-button')
+        submitButton.classList.add('popup__save-button_disabled');
+        submitButton.disabled = true;
     }
 }

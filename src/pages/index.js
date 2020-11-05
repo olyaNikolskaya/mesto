@@ -9,77 +9,69 @@ import UserInfo from '../components/UserInfo.js';
 import {initialCards, cardConfig, validationConfig} from '../utils/config.js';
 
 const profileNameSelector = '.profile__name'
-const profileDescriptionSelector = '.profile__description'
-const photoPreviewSelector = '.popup_photo-preview'
-const popupAddCardSelector = '.popup_add-card'
-const popupEditSelector = '.popup_edit-profile';
+const profileDescriptionElement = '.profile__description'
+const photoPreviewSelector = document.querySelector('.popup_photo-preview')
+const popupAddCardElement = document.querySelector('.popup_add-card');
+const popupEditElement = document.querySelector('.popup_edit-profile');
 const addCardButton = document.querySelector('.profile__add-button');
 const editProfileButton = document.querySelector('.profile__edit-button')
 
-function getPopupWithImage(item) {
-    const photoPreview = new PopupWithImage(photoPreviewSelector, item)
-    photoPreview.setEventListeners();
-    return photoPreview;
-}
+const photoPreview = new PopupWithImage(photoPreviewSelector)
+photoPreview.setEventListeners();
 
 function getCardItem(item) {
-    const photoPreview = getPopupWithImage(item);
     const card = new Card(item, cardConfig, 
         () => {
-            photoPreview.open()
+            photoPreview.open(item)
         });
     return card
 }
 
-function createSection(initialData) {
-    const section = new Section({
-        items: initialData, 
-        renderer: (item) => {
-            const card = getCardItem(item);
-            section.addItem(card.getCardItem());
-        }
-    }, cardConfig.cardlist);
-    section.renderItems();
-}
+const cardList = new Section({ 
+    renderer: (item) => {
+        const card = getCardItem(item);
+        cardList.addItem(card.getCardItem());
+    }
+}, cardConfig.cardlist);
+cardList.renderItems(initialCards);
 
-function enableValidation(configObj){
-    const formsList = Array.from(document.querySelectorAll(configObj.formSelector));
-    formsList.forEach((form) => {
-       const validator = new FormValidator(configObj, form)
-       validator.enableValidation()
-        });
-}
+const validator = new FormValidator(validationConfig)
 
 const addCardPopup = new PopupWithForm(
-    popupAddCardSelector,
+    popupAddCardElement,
     (event) => {
         event.preventDefault();
-        const cardData = [addCardPopup._getInputValues()];
-        createSection(cardData)
+        const cardData = addCardPopup.getInputValues();
+        const card = getCardItem(cardData);
+        cardList.addItem(card.getCardItem());
         addCardPopup.close();
     });
+validator.enableValidation(popupAddCardElement.querySelector(validationConfig.formSelector))
 
 const userInfo = new UserInfo({
     userNameSelector: profileNameSelector,
-    userDescriptionSelector: profileDescriptionSelector,
+    userDescriptionSelector: profileDescriptionElement,
 })
 
 const editUserInfoPopup = new PopupWithForm(
-    popupEditSelector,
+    popupEditElement,
     (event) => {
         event.preventDefault();
-        const inputValues = editUserInfoPopup._getInputValues();
+        const inputValues = editUserInfoPopup.getInputValues();
         userInfo.setUserInfo(inputValues)
         editUserInfoPopup.close();
     });
+validator.enableValidation(popupEditElement.querySelector(validationConfig.formSelector))
 
-
-createSection(initialCards);
 editProfileButton.addEventListener("click", () => {
     editUserInfoPopup.open()
     editUserInfoPopup.setInputValue(userInfo.getUserInfo())
 })  
-addCardButton.addEventListener("click", addCardPopup.open.bind(addCardPopup))
+addCardButton.addEventListener("click", () => {
+    addCardPopup.disableSubmitButton()
+    addCardPopup.open()
+})
+
 addCardPopup.setEventListeners();
 editUserInfoPopup.setEventListeners();
-enableValidation(validationConfig);
+
