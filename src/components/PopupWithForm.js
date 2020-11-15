@@ -32,4 +32,13 @@ export default class PopupWithForm extends Popup {
         });
         return objInputValues;
     }
+
+    renderLoading(isLoading) {
+        const saveButton = this._popupForm.querySelector('.popup__save-button')
+        if(isLoading) {
+            saveButton.textContent = "Сохранение..."
+        } else {
+            saveButton.textContent = "Сохранить"
+        }
+    }
 }

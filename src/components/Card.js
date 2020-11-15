@@ -1,42 +1,91 @@
  export default class Card {
-    constructor(item, config, handleCardClick) {
-        this._name = item.name;
-        this._image = item.image;
-        this._config = config;
-        this._handleCardClick = handleCardClick;
+    constructor(
+        {likes, _id, name, link, owner},
+        {cardPhotoSelector, cardTitleSelector, cardLikeSelector, cardLikesCounterSelector, cardRemoveButtonSelector
+            , cardTemplate, activeLikeClass}, 
+        {handleCardClick, handleRemoveClick, handleSetLike, handleRemoveLike}
+        ) {
+            this._likesList = likes;
+            this._cardId = _id
+            this._name = name;
+            this._link = link;
+            this._ownerId = owner._id
+            this._cardItem = cardTemplate.content.cloneNode(true).querySelector('.cards__item');
+            this._likesNumber = this._likesList.length
+
+            this._cardPhoto = this._cardItem.querySelector(cardPhotoSelector);
+            this._cardTitle = this._cardItem.querySelector(cardTitleSelector);
+            this._cardRemoveButton = this._cardItem.querySelector(cardRemoveButtonSelector);
+            this._cardLike = this._cardItem.querySelector(cardLikeSelector);
+            this._cardLikesConter = this._cardItem.querySelector(cardLikesCounterSelector);
+
+            this._handleCardClick = handleCardClick;
+            this._handleRemoveClick = handleRemoveClick;
+            this._handleSetLike = handleSetLike;
+            this._handleRemoveLike = handleRemoveLike;
+
+            this._activeLikeClass = activeLikeClass
     }
 
-    getCardItem() {
-        this._cardItem = this._getCardTemplate();
-        this._fillCardWithData();
-        this._setEventListeners();
-        return this._cardItem;
+    getCardInfo() {
+        const cardInfo = {}
+        cardInfo.likes = this._likesList;
+        
+        cardInfo.id = this._cardId;
+        cardInfo.name = this._name;
+        cardInfo.link = this._link;
+        cardInfo.ownerId = this._ownerId
+        return cardInfo
     }
 
-    _getCardTemplate() {
-        return this._config.cardTemplate.content.cloneNode(true).querySelector('.cards__item');
-    }
-    
-    _fillCardWithData() {
-        const cardPhoto = this._cardItem.querySelector(this._config.cardPhotoSelector);
-        const cardTitle = this._cardItem.querySelector(this._config.cardTitleSelector);
-        cardPhoto.src = this._image;
-        cardPhoto.alt = this._name;
-        cardTitle.textContent = this._name;
+    setLikesNumber(number) {
+        this._likesNumber = number
     }
 
-
-    _setEventListeners() {
-        this._cardItem.querySelector(this._config.cardRemoveButtonSelector).addEventListener('click', () => this._removeCard());
-        this._cardItem.querySelector(this._config.cardLikeSelector).addEventListener('click', () => this._likeCard());
-        this._cardItem.querySelector(this._config.cardPhotoSelector).addEventListener('click', () => this._handleCardClick());
-    }
-
-    _removeCard() {
+    removeCard() {
         this._cardItem.remove();
     }
 
+    renderCard(userId) {
+        this._cardPhoto.src = this._link;
+        this._cardPhoto.alt = this._name;
+        this._cardTitle.textContent = this._name;
+        this._cardLikesConter.textContent = this._likesNumber;
+
+        const number = this._countLikesByUser(userId)
+        if(number > 0) {
+            this._toggleLike()
+        }
+
+        if(this._ownerId !== userId) {
+            this._cardRemoveButton.classList.add('cards__remove-button_hidden');
+        }
+        this._setEventListeners();
+        return this._cardItem
+    }
+
+    _countLikesByUser(userId) {
+        return this._likesList.filter(item => item._id === userId).length
+    }
+
+    _setEventListeners() {
+        this._cardRemoveButton.addEventListener('click', () => this._handleRemoveClick());
+        this._cardLike.addEventListener('click', () => this._likeCard());
+        this._cardPhoto.addEventListener('click', () => this._handleCardClick());
+    }
+
     _likeCard() {
-        this._cardItem.querySelector(this._config.cardLikeSelector).classList.toggle(this._config.activeLikeClass);
+        if (this._cardLike.classList.contains(this._activeLikeClass)){
+            this._cardLikesConter.textContent = this._likesNumber - 1
+            this._handleRemoveLike()
+        } else {
+            this._cardLikesConter.textContent = this._likesNumber + 1
+            this._handleSetLike()
+        }
+        this._toggleLike()
+    }
+
+    _toggleLike() {
+        this._cardLike.classList.toggle(this._activeLikeClass);
     }
 }

@@ -4,6 +4,8 @@
 @import url(./__content/cards__content.css);
 @import url(./__title/cards__title.css);
 @import url(./__like/cards__like.css);
+@import url(./__like-block/cards__like-block.css);
+@import url(./__likes_count/cards__likes_count.css);
 
 .cards {
     display: grid;

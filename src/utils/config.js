@@ -27,12 +27,13 @@ export const initialCards = [
 
 export const cardConfig = {
     cardTemplate: document.querySelector('#card-item'),
-    cardlist: document.querySelector('.cards'),
+    cardList: document.querySelector('.cards'),
     previewPhotophoto: document.querySelector('.popup__preview-photo'),
     previewSubtitle: document.querySelector('.popup__preview-subtitle'),
     cardPhotoSelector: '.cards__photo',
     cardTitleSelector: '.cards__title',
     cardLikeSelector: '.cards__like',
+    cardLikesCounterSelector: '.cards__likes_count',
     cardRemoveButtonSelector: '.cards__remove-button',
     activeLikeClass: 'cards__like_active'
 }
