@@ -9,7 +9,7 @@ export default class FormValidator {
     }
 
     disableSubmitButton() {
-        const submitButton = this._form.querySelector('.popup__save-button') 
+        const submitButton = this._form.querySelector(this._config.submitButtonSelector) 
         submitButton.classList.add(this._config.inactiveButtonClass);
         submitButton.disabled = true;
     }

@@ -56,6 +56,12 @@ const  api = new Api({
     const photoPreview = new PopupWithImage(photoPreviewSelector)
     photoPreview.setEventListeners();
 
+    const confirmCardRemovingPopup = new PopupWithForm(
+        confirmCardRemovingPopupElement,
+        () => {}
+    );
+    confirmCardRemovingPopup.setEventListeners();
+
     function getCardItem(cardData) {
         const card = new Card(cardData, cardConfig, 
             {
@@ -63,27 +69,35 @@ const  api = new Api({
                     photoPreview.open(cardData)
                 },
                 handleRemoveClick: () => {
-                    const confirmCardRemovingPopup = new PopupWithForm(
-                        confirmCardRemovingPopupElement,
-                        (event) => {
-                            event.preventDefault();
-                            api.deleteCard(cardData._id)
+                    confirmCardRemovingPopup.setSubmitHandler((event) => {
+                        event.preventDefault();
+                        confirmCardRemovingPopup.renderLoading(true)
+                        api.deleteCard(cardData._id)
+                        .then(() => {
                             card.removeCard();
-                            confirmCardRemovingPopup.close();
-                        }
-                    );
-                    confirmCardRemovingPopup.setEventListeners();
+                            confirmCardRemovingPopup.close()
+                            confirmCardRemovingPopup.renderLoading(false);})
+                        .catch((err) => {
+                            console.log(err);
+                        })
+                })
                     confirmCardRemovingPopup.open();
                 },
                 handleSetLike: () => {
                     api.setLike(cardData._id).then((len) => {
                         card.setLikesNumber(len)
                     })
+                    .catch((err) => {
+                        console.log(err);
+                      })
                 },
                 handleRemoveLike: () => {
                     api.removeLike(cardData._id).then((len) => {
                         card.setLikesNumber(len)
                     })
+                    .catch((err) => {
+                        console.log(err);
+                      })
                 }
             },);
         return card
@@ -99,7 +113,9 @@ const  api = new Api({
     
     api.getInitialCards().then((cardsData) => {
         cardList.renderItems(cardsData);
-    });
+    }).catch((err) => {
+        console.log(err);
+      });
         
     const editAvatarPopup = new PopupWithForm(
         popupEditAvatarElement,
@@ -108,12 +124,18 @@ const  api = new Api({
             editAvatarPopup.renderLoading(true)
             const inputValues = editAvatarPopup.getInputValues();
 
-            api.updateAvatar(inputValues).finally(() => {
+            api.updateAvatar(inputValues)
+            .then(() => {
+                userInfo.setUserAvatar(inputValues)
+                userInfo.renderUserAvatar();
+                editAvatarPopup.close();  
+            })
+            .catch((err) => {
+                console.log(err);
+              })
+            .finally(() => {
                 editAvatarPopup.renderLoading(false)
             })
-            userInfo.setUserAvatar(inputValues)
-            userInfo.renderUserAvatar();
-            editAvatarPopup.close();
         });
     
         const validatorEditAvatarPopup = new FormValidator(validationConfig, popupEditAvatarElement.querySelector(validationConfig.formSelector))
@@ -130,9 +152,13 @@ const  api = new Api({
             api.addCard(cardData).then((data) => {
                 const card = getCardItem(data);
                 cardList.addItem(card.renderCard(data.owner._id));
-            }).finally(() => {
-                addCardPopup.renderLoading(false)
                 addCardPopup.close();
+            })
+            .catch((err) => {
+                console.log(err);
+              })
+            .finally(() => {
+                addCardPopup.renderLoading(false)
          })
     });
     const validatorAddCardPopup = new FormValidator(validationConfig, popupAddCardElement.querySelector(validationConfig.formSelector))
@@ -144,10 +170,16 @@ const  api = new Api({
             event.preventDefault();
             editUserInfoPopup.renderLoading(true)
             const inputValues = editUserInfoPopup.getInputValues();
-            userInfo.setUserName(inputValues);
-            userInfo.setUserAbout(inputValues);
-            userInfo.renderUserNameAndAbout();
-            api.editUserInfo(inputValues).finally(()=>{
+            api.editUserInfo(inputValues)
+            .then(() => {
+                userInfo.setUserName(inputValues);
+                userInfo.setUserAbout(inputValues);
+                userInfo.renderUserNameAndAbout();
+            })
+            .catch((err) => {
+                console.log(err);
+              })
+            .finally(()=>{
                 editUserInfoPopup.renderLoading(false)
                 editUserInfoPopup.close();
             })
@@ -160,4 +192,3 @@ const  api = new Api({
     addCardPopup.setEventListeners();
     editUserInfoPopup.setEventListeners();
     editAvatarPopup.setEventListeners();
-
